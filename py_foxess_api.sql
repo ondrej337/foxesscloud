@@ -1,4 +1,4 @@
--- Active: 1707510881183@@127.0.0.1@5432@doma@DEV
+SET ROLE mydba;
 DROP FUNCTION py_foxess_api;
 CREATE OR REPLACE FUNCTION "DEV".py_foxess_api(p_method character varying, p_key text, p_domain character varying, p_path character varying, p_param json DEFAULT '{"None": "None"}'::json)
  RETURNS text
@@ -53,11 +53,6 @@ AS $function$
             response = requests.post(url=url, json=param, headers=headers, verify=False)
         else:
             raise Exception('request method error')
-        
-        if debug:
-            result = {'url': url, 'method': method, 'param': param, 'headers': headers, 'response': response.text}
-            print(json.dumps(result, indent=1))
-            print('-------------------------' * 5)
 
         return json.loads(response.content)['result']
     return fr_requests(p_method, p_key, p_domain, p_path, json.loads(p_param))
